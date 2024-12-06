@@ -15,7 +15,7 @@ pipeline {
                     // withCredentials([usernamePassword(credentialsId: 'DockerHubPwd', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh '''
                             ssh -tt vagrant@192.168.10.134 -o StrictHostKeyChecking=no "sudo docker pull sanjeebnepal/npestate:latest"
-                            ssh -tt vagrant@192.168.10.134 -o StrictHostKeyChecking=no "sudo docker stop exam-nginx || true && docker rm exam-nginx || true"
+                            ssh -tt vagrant@192.168.10.134 -o StrictHostKeyChecking=no "sudo docker stop exam-nginx || true && sudo docker rm exam-nginx || true"
                             ssh -tt vagrant@192.168.10.134 -o StrictHostKeyChecking=no "sudo docker run --name exam-nginx -d -p 8082:80 sanjeebnepal/npestate:latest"
                         '''
                     // }
