@@ -21,7 +21,8 @@ pipeline {
         stage('Build and run docker image') {
             steps {
                 sh 'sudo docker build -t sanjeebnepal/npestate:latest .' 
-                sh 'sudo docker run -d -p 8081:3000  sanjeebnepal/npestate:latest'
+                sh 'sudo docker stop npestate-con || true && sudo docker rm npestate-con || true'
+                sh 'sudo docker --name npestate-con run -d -p 8081:3000  sanjeebnepal/npestate:latest'
             } 
         }
 
