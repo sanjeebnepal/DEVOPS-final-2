@@ -3,9 +3,9 @@ pipeline {
     stages {
         // stage('Build and run docker image') {
         //     steps {
-        //         sh 'sudo docker stop exam-nginx || true && docker rm exam-nginx || true'
+        //         sh 'sudo docker stop npestate-con || true && docker rm npestate-con || true'
         //         sh 'sudo docker pull sanjeebnepal/npestate:latest'
-        //         sh 'sudo docker run --name exam-nginx -d -p 8082:80 sanjeebnepal/npestate:latest'
+        //         sh 'sudo docker run --name npestate-con -d -p 8082:80 sanjeebnepal/npestate:latest'
         //     }
         // }
 
@@ -15,8 +15,8 @@ pipeline {
                     // withCredentials([usernamePassword(credentialsId: 'DockerHubPwd', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh '''
                             ssh -tt vagrant@192.168.10.134 -o StrictHostKeyChecking=no "sudo docker pull sanjeebnepal/npestate:latest"
-                            ssh -tt vagrant@192.168.10.134 -o StrictHostKeyChecking=no "sudo docker stop exam-nginx || true && sudo docker rm exam-nginx || true"
-                            ssh -tt vagrant@192.168.10.134 -o StrictHostKeyChecking=no "sudo docker run --name exam-nginx -d -p 8082:3000 sanjeebnepal/npestate:latest"
+                            ssh -tt vagrant@192.168.10.134 -o StrictHostKeyChecking=no "sudo docker stop npestate-con || true && sudo docker rm npestate-con || true"
+                            ssh -tt vagrant@192.168.10.134 -o StrictHostKeyChecking=no "sudo docker run --name npestate-con -d -p 8082:3000 sanjeebnepal/npestate:latest"
                         '''
                     // }
                 }
