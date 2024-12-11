@@ -52,7 +52,7 @@ pipeline {
                             if (k3s_installed_worker != 0) {
                                 echo "K3s is not installed on worker node ${node}, installing..."
                                 sh """
-                                ssh vagrant@${node} 'curl -sfL https://get.k3s.io | K3S_URL=https://${KUBE_MASTER}:6443 K3S_TOKEN=${k3sToken} sh -'
+                                ssh -tt vagrant@${node} -o StrictHostKeyChecking=no 'curl -sfL https://get.k3s.io | K3S_URL=https://${KUBE_MASTER}:6443 K3S_TOKEN=${k3sToken} sh -'
                                 """
                             } else {
                                 echo "K3s is already installed on worker node ${node}."
@@ -73,8 +73,8 @@ pipeline {
                         """
                         // Apply the deployment and service
                         sh """
-                        ssh vagrant@${KUBE_MASTER} 'kubectl apply -f ~/manifests/deployment.yaml'
-                        ssh vagrant@${KUBE_MASTER} 'kubectl apply -f ~/manifests/service.yaml'
+                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'kubectl apply -f ~/manifests/deployment.yaml'
+                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'kubectl apply -f ~/manifests/service.yaml'
                         """
                     }
                 }
