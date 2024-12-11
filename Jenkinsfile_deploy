@@ -1,0 +1,98 @@
+pipeline {
+    agent any
+
+    environment {
+        KUBE_MASTER = "192.168.10.134"  //IP of master node
+        DOCKER_IMAGE = "sanjeebnepal/npestate:latest"
+        WORKER_NODES = "192.168.10.137 192.168.10.138" //worker node IPs
+    }
+
+    stages {
+        stage('Setup SSH Agent') {
+            steps {
+                script {
+                    // Ensure the SSH agent is initialized
+                    sshagent(['kube-cluster-ssh-credentials']) {
+                        // Now the agent will be available for use in subsequent stages
+                    }
+                }
+            }
+        }
+
+        stage('Check and Install K3s on Control Node') {
+            steps {
+                script {
+                    sshagent(['kube-cluster-ssh-credentials']) {
+                        // Check if K3s is installed on the control node
+                        def k3s_installed = sh(script: "ssh vagrant@${KUBE_MASTER} 'which k3s'", returnStatus: true)
+                        if (k3s_installed != 0) {
+                            // Install K3s if not installed
+                            echo "K3s is not installed, installing..."
+                            sh """
+                            ssh vagrant@${KUBE_MASTER} 'curl -sfL https://get.k3s.io | sh -'
+                            """
+                        } else {
+                            echo "K3s is already installed on control node."
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Check and Install K3s on Worker Nodes') {
+            steps {
+                script {
+                    sshagent(['kube-cluster-ssh-credentials']) {
+                        // Retrieve K3s token from control node
+                        def k3sToken = sh(script: "ssh vagrant@${KUBE_MASTER} 'cat /var/lib/rancher/k3s/server/node-token'", returnStdout: true).trim()
+
+                        // Loop through worker nodes and install K3s if not installed
+                        WORKER_NODES.split().each { node ->
+                            def k3s_installed_worker = sh(script: "ssh vagrant@${node} 'which k3s'", returnStatus: true)
+                            if (k3s_installed_worker != 0) {
+                                echo "K3s is not installed on worker node ${node}, installing..."
+                                sh """
+                                ssh vagrant@${node} 'curl -sfL https://get.k3s.io | K3S_URL=https://${KUBE_MASTER}:6443 K3S_TOKEN=${k3sToken} sh -'
+                                """
+                            } else {
+                                echo "K3s is already installed on worker node ${node}."
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Application to Kubernetes') {
+            steps {
+                script {
+                    sshagent(['kube-cluster-ssh-credentials']) {
+                        // Copy Kubernetes manifests to control node
+                        sh """
+                        scp -r kubernetes-manifests vagrant@${KUBE_MASTER}:~/manifests
+                        """
+                        // Apply the deployment and service
+                        sh """
+                        ssh vagrant@${KUBE_MASTER} 'kubectl apply -f ~/manifests/deployment.yaml'
+                        ssh vagrant@${KUBE_MASTER} 'kubectl apply -f ~/manifests/service.yaml'
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                script {
+                    sshagent(['kube-cluster-ssh-credentials']) {
+                        // Verify deployment status
+                        sh """
+                        ssh vagrant@${KUBE_MASTER} 'kubectl get pods && kubectl get services'
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
+
