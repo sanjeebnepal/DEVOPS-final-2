@@ -87,7 +87,7 @@ pipeline {
                     sshagent(['kube-cluster-ssh-credentials']) {
                         // Verify deployment status
                         sh """
-                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'sudo kubectl get pods && kubectl get services'
+                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'sudo kubectl get pods && sudo kubectl get services'
                         """
                     }
                 }
