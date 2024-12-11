@@ -44,7 +44,7 @@ pipeline {
                 script {
                     sshagent(['kube-cluster-ssh-credentials']) {
                         // Retrieve K3s token from control node
-                        def k3sToken = sh(script: "ssh vagrant@${KUBE_MASTER} 'cat /var/lib/rancher/k3s/server/node-token'", returnStdout: true).trim()
+                        def k3sToken = sh(script: "ssh vagrant@${KUBE_MASTER} 'sudo cat /var/lib/rancher/k3s/server/node-token'", returnStdout: true).trim()
 
                         // Loop through worker nodes and install K3s if not installed
                         WORKER_NODES.split().each { node ->
