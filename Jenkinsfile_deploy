@@ -73,8 +73,8 @@ pipeline {
                         """
                         // Apply the deployment and service
                         sh """
-                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'kubectl apply -f ~/manifests/deployment.yaml'
-                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'kubectl apply -f ~/manifests/service.yaml'
+                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'sudo kubectl apply -f ~/manifests/deployment.yaml'
+                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'sudo kubectl apply -f ~/manifests/service.yaml'
                         """
                     }
                 }
@@ -87,7 +87,7 @@ pipeline {
                     sshagent(['kube-cluster-ssh-credentials']) {
                         // Verify deployment status
                         sh """
-                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'kubectl get pods && kubectl get services'
+                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'sudo kubectl get pods && kubectl get services'
                         """
                     }
                 }
