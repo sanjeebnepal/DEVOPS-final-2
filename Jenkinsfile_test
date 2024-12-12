@@ -23,8 +23,8 @@ pipeline {
             steps {
                 script {
                     // Install Node and dependencies
-                    sh '''sudo apt update
-                        sudo apt install nodejs npm
+                    sh '''sudo apt update -y
+                        sudo apt install nodejs npm -y
                         '''
                     sh 'npm install'
                 }
