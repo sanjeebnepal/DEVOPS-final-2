@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        KUBE_MASTER = "192.168.10.134"  //IP of master node
+        KUBE_MASTER = "192.168.10.148"  //IP of master node
         DOCKER_IMAGE = "sanjeebnepal/npestate:latest"
-        WORKER_NODES = "192.168.10.137 192.168.10.138" //worker node IPs
+        WORKER_NODES = "192.168.10.149 192.168.10.151" //worker node IPs
     }
 
     stages {
@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     // Ensure the SSH agent is initialized
-                    sshagent(['ssh-key']) {
+                    sshagent(['kube-cluster-ssh-credentials']) {
                         // Now the agent will be available for use in subsequent stages
                     }
                 }
@@ -22,7 +22,7 @@ pipeline {
         stage('Check and Install K3s on Control Node') {
             steps {
                 script {
-                    sshagent(['ssh-key']) {
+                    sshagent(['kube-cluster-ssh-credentials']) {
                         // Check if K3s is installed on the control node
                         def k3s_installed = sh(script: "ssh vagrant@${KUBE_MASTER} 'which k3s'", returnStatus: true)
                         if (k3s_installed != 0) {
@@ -42,7 +42,7 @@ pipeline {
         stage('Check and Install K3s on Worker Nodes') {
             steps {
                 script {
-                    sshagent(['ssh-key']) {
+                    sshagent(['kube-cluster-ssh-credentials']) {
                         // Retrieve K3s token from control node
                         def k3sToken = sh(script: "ssh vagrant@${KUBE_MASTER} 'sudo cat /var/lib/rancher/k3s/server/node-token'", returnStdout: true).trim()
 
@@ -66,7 +66,7 @@ pipeline {
         stage('Deploy Application to Kubernetes') {
             steps {
                 script {
-                    sshagent(['ssh-key']) {
+                    sshagent(['kube-cluster-ssh-credentials']) {
                         // Copy Kubernetes manifests to control node
                         sh """
                         scp -r kubernetes-manifests vagrant@${KUBE_MASTER}:~/manifests
@@ -84,7 +84,7 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 script {
-                    sshagent(['ssh-key']) {
+                    sshagent(['kube-cluster-ssh-credentials']) {
                         // Verify deployment status
                         sh """
                         ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'sudo kubectl get pods && sudo kubectl get services'
