@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Install Node and dependencies
+                    sh 'npm install'
+                }
+            }
+        }
+        
+        stage('Run Cypress Tests') {
+            steps {
+                script {
+                    // Run Cypress tests
+                    sh 'npx cypress run --headless --browser chrome'
+                }
+            }
+        }
+    }
+}
