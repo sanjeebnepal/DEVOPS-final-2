@@ -27,6 +27,7 @@ pipeline {
                         sudo apt install nodejs npm chromium xvfb libgtk-3-0 libxss1 libasound2 libgdk-pixbuf2.0-0 libnss3 -y
                         chromium --version
                         npm install
+			cypress install
                         '''
                 }
             }
