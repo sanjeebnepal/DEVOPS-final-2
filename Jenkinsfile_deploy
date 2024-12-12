@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     // Ensure the SSH agent is initialized
-                    sshagent(['kube-cluster-ssh-credentials']) {
+                    sshagent(['ssh-key']) {
                         // Now the agent will be available for use in subsequent stages
                     }
                 }
@@ -22,7 +22,7 @@ pipeline {
         stage('Check and Install K3s on Control Node') {
             steps {
                 script {
-                    sshagent(['kube-cluster-ssh-credentials']) {
+                    sshagent(['ssh-key']) {
                         // Check if K3s is installed on the control node
                         def k3s_installed = sh(script: "ssh vagrant@${KUBE_MASTER} 'which k3s'", returnStatus: true)
                         if (k3s_installed != 0) {
@@ -42,7 +42,7 @@ pipeline {
         stage('Check and Install K3s on Worker Nodes') {
             steps {
                 script {
-                    sshagent(['kube-cluster-ssh-credentials']) {
+                    sshagent(['ssh-key']) {
                         // Retrieve K3s token from control node
                         def k3sToken = sh(script: "ssh vagrant@${KUBE_MASTER} 'sudo cat /var/lib/rancher/k3s/server/node-token'", returnStdout: true).trim()
 
@@ -66,7 +66,7 @@ pipeline {
         stage('Deploy Application to Kubernetes') {
             steps {
                 script {
-                    sshagent(['kube-cluster-ssh-credentials']) {
+                    sshagent(['ssh-key']) {
                         // Copy Kubernetes manifests to control node
                         sh """
                         scp -r kubernetes-manifests vagrant@${KUBE_MASTER}:~/manifests
@@ -84,7 +84,7 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 script {
-                    sshagent(['kube-cluster-ssh-credentials']) {
+                    sshagent(['ssh-key']) {
                         // Verify deployment status
                         sh """
                         ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'sudo kubectl get pods && sudo kubectl get services'
