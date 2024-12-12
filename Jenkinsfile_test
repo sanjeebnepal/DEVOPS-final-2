@@ -25,6 +25,7 @@ pipeline {
                     // Install Node and dependencies
                     sh '''sudo apt update -y
                         sudo apt install nodejs npm -y
+                        sudo apt-get install -y xvfb
                         '''
                     sh 'npm install'
                 }
