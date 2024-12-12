@@ -1,7 +1,6 @@
 pipeline {
     agent any
-    
-    
+
     stages {
         stage('Cleanup') {
             steps {
@@ -11,25 +10,22 @@ pipeline {
 
         stage('Clone Git Repo') {
             steps {
-                checkout scm
-            }
-        }
-        stage('Clone from repository') {
-            steps {
                 git url: 'https://github.com/sanjeebnepal/DEVOPS_final-project.git', branch: 'test', credentialsId: 'GIT'
             }
         }
+
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Install Node and dependencies
-                    sh '''sudo apt update -y
-                        sudo apt install nodejs npm chromium xvfb libgtk-3-0 libxss1 libasound2 libgdk-pixbuf2.0-0 libnss3 -y
+                    // Install system and project dependencies
+                    sh '''
+                        sudo apt update -y
+                        sudo apt install -y nodejs npm chromium xvfb libgtk-3-0 libxss1 libasound2 libgdk-pixbuf2.0-0 libnss3
                         chromium --version
-                        sudo npm install
-                        sudo npm install --save-dev cypress
-                        sudo npx cypress install
-                        '''
+                        npm install
+                        npm install --save-dev cypress
+                        npx cypress install
+                    '''
                 }
             }
         }
@@ -38,16 +34,30 @@ pipeline {
             steps {
                 script {
                     // Start the Next.js development server in the background
-                    sh 'sudo npm run dev &'
+                    sh 'nohup npm run dev > dev.log 2>&1 &'
                 }
             }
         }
-        
+
         stage('Run Cypress Tests') {
             steps {
                 script {
                     // Run Cypress tests
-                    sh 'sudo npx cypress run --headless --browser chromium'
+                    sh 'npx cypress run --headless --browser chromium'
+                }
+            }
+        }
+
+        stage('Stop Development Server') {
+            steps {
+                script {
+                    // Stop the Next.js development server
+                    sh '''
+                        SERVER_PID=$(lsof -t -i:3000)
+                        if [ -n "$SERVER_PID" ]; then
+                            kill -9 $SERVER_PID
+                        fi
+                    '''
                 }
             }
         }
