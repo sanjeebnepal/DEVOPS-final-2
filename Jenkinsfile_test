@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     // Start the Next.js development server in the background
-                    sh 'sudo npm run dev &'
+                    sh 'npm run dev &'
                 }
             }
         }
@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     // Run Cypress tests
-                    sh 'sudo npx cypress run --headless --browser chromium'
+                    sh 'npx cypress run --headless --browser chromium'
                 }
             }
         }
