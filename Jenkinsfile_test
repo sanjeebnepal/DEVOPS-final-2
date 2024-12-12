@@ -1,7 +1,24 @@
 pipeline {
     agent any
     
+    
     stages {
+        stage('Cleanup') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage('Clone Git Repo') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Clone from repository') {
+            steps {
+                git url: 'https://github.com/sanjeebnepal/DEVOPS_final-project.git', branch: 'test', credentialsId: 'GIT'
+            }
+        }
         stage('Install Dependencies') {
             steps {
                 script {
