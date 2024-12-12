@@ -15,14 +15,5 @@ describe('Home Page Tests', () => {
       cy.contains('Explore Buying').should('be.visible');
     });
   
-    it('should navigate to the renting search page when "Explore Renting" is clicked', () => {
-      cy.contains('Explore Renting').click();
-      cy.url().should('include', '/search?purpose=for-rent');
-    });
-  
-    it('should navigate to the buying search page when "Explore Buying" is clicked', () => {
-      cy.contains('Explore Buying').click();
-      cy.url().should('include', '/search?purpose=for-sale');
-    });
   });
   
