@@ -87,7 +87,7 @@ pipeline {
                     sshagent(['ssh-key']) {
                         // Verify deployment status
                         sh """
-                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'sudo kubectl get pods && sudo kubectl get services'
+                        ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'sudo kubectl get pods -o wide && sudo kubectl get services -o wide'
                         """
                     }
                 }
