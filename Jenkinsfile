@@ -28,6 +28,7 @@ pipeline {
 
         stage('testing') {
             steps {
+                sh 'sleep 10'
                 sh 'curl -I --max-time 60 192.168.10.152:8081'
             }
         }
