@@ -73,7 +73,7 @@ pipeline {
         stage('testing') {
             steps {
                 sh 'sleep 10'
-                sh 'curl -I --max-time 60 192.168.10.152:8081'
+                sh 'curl -I --max-time 60 192.168.10.156:8081' //IP of jenkins server
             }
         }
 
@@ -95,7 +95,7 @@ pipeline {
             steps {
                 script {
                     // Trigger the 'staging' pipeline after 'test' finishes
-                    build job: 'npestate-staging', wait: false
+                    build job: 'staging', wait: false
                 }
             }
         }
