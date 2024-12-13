@@ -66,9 +66,7 @@ pipeline {
             steps {
                 script {
                     // Trigger the 'develop' pipeline after 'test' finishes
-                    build job: 'npestate-multibranch', parameters: [
-                        string(name: 'BRANCH_NAME', value: 'develop')
-                    ]
+                    build job: 'npestate-develop', wait: true
                 }
             }
         }
