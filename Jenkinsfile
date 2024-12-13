@@ -61,6 +61,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Trigger develop Pipeline') {
+            steps {
+                script {
+                    // Trigger the 'develop' pipeline after 'test' finishes
+                    build job: 'Your-Multibranch-Pipeline-Name', parameters: [
+                        string(name: 'BRANCH_NAME', value: 'develop')
+                    ]
+                }
+            }
+        }
     }
 }
 
