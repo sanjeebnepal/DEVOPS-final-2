@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: npestate-deployment
+  labels:
+    app: npestate
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: npestate
+  template:
+    metadata:
+      labels:
+        app: npestate
+    spec:
+      containers:
+        - name: npestate-container
+          image: sanjeebnepal/npestate:latest  
+          ports:
+            - containerPort: 3000
