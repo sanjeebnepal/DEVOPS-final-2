@@ -50,9 +50,7 @@ pipeline {
             steps {
                 script {
                     // Trigger the 'main' pipeline after 'develop' finishes
-                    build job: 'npestate-multibranch', parameters: [
-                        string(name: 'BRANCH_NAME', value: 'main')
-                    ]
+                    build job: 'npestate-main', wait: true
                 }
             }
         }
