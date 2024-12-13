@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        KUBE_MASTER = "192.168.10.148"  //IP of master node
+        KUBE_MASTER = "192.168.10.7"  //IP of master node
         DOCKER_IMAGE = "sanjeebnepal/npestate:latest"
-        WORKER_NODES = "192.168.10.149 192.168.10.151" //worker node IPs
+        WORKER_NODES = "192.168.10.8 192.168.10.9" //worker node IPs
     }
 
     stages {
@@ -29,7 +29,7 @@ pipeline {
                             // Install K3s if not installed
                             echo "K3s is not installed, installing..."
                             sh """
-                            ssh vagrant@${KUBE_MASTER} 'curl -sfL https://get.k3s.io | sh -'
+                            ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'curl -sfL https://get.k3s.io | sh -'
                             """
                         } else {
                             echo "K3s is already installed on control node."
