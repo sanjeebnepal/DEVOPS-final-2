@@ -10,7 +10,7 @@ pipeline {
 
         stage('Clone Git Repo') {
             steps {
-                git url: 'https://github.com/sanjeebnepal/DEVOPS_final-project.git', branch: 'test', credentialsId: 'GIT'
+                git url: 'https://github.com/sanjeebnepal/DEVOPS-final-2.git', branch: 'test', credentialsId: 'GIT'
             }
         }
 
