@@ -29,7 +29,7 @@ pipeline {
                             // Install K3s if not installed
                             echo "K3s is not installed, installing..."
                             sh """
-                            ssh vagrant@${KUBE_MASTER} 'curl -sfL https://get.k3s.io | sh -'
+                            ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'curl -sfL https://get.k3s.io | sh -'
                             """
                         } else {
                             echo "K3s is already installed on control node."
