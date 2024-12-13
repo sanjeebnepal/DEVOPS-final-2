@@ -26,7 +26,7 @@ pipeline {
                         // Check if K3s is installed on the control node
                         def k3s_installed = sh(script: "ssh vagrant@${KUBE_MASTER} 'which k3s'", returnStatus: true)
                         if (k3s_installed != 0) {
-                            // Install K3s if not installed
+                            // Install K3s if not installed then show the message
                             echo "K3s is not installed, installing..."
                             sh """
                             ssh -tt vagrant@${KUBE_MASTER} -o StrictHostKeyChecking=no 'curl -sfL https://get.k3s.io | sh -'
