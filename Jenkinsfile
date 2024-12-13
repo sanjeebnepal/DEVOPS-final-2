@@ -28,7 +28,7 @@ pipeline {
 
         stage('testing') {
             steps {
-                sh 'curl -I --max-time 60 192.168.10.128:8081'
+                sh 'curl -I --max-time 60 192.168.10.152:8081'
             }
         }
 
