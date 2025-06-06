@@ -48,6 +48,9 @@ Three primary environments:
 Each environment is provisioned using Vagrant. Scripts:  
 👉 [Vagrant Setup Repo](https://github.com/sanjeebnepal/Vagrant-script-jenkinsdockerkubernetes.git)
 
+### 📊 Deployment Architecture Diagram
+
+![CI/CD Architecture](architecture.png)
 ---
 
 ## 🔄 CI/CD Pipeline Workflow
