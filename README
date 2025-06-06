@@ -1,113 +1,96 @@
-# 🚀 Full-Stack DevOps Pipeline: Next.js Deployment using Jenkins, Docker & Kubernetes
+📁 Project Structure
+Frontend Framework: Next.js
 
-This project implements a full CI/CD pipeline for a **Next.js web application**, leveraging DevOps tools and best practices to streamline automated testing, containerization, and deployment across development, staging, and production environments.
+CI/CD: Jenkins
 
-## 📁 Project Structure
-- **Frontend Framework:** Next.js
-- **CI/CD:** Jenkins
-- **Containerization:** Docker
-- **Orchestration:** Kubernetes (K3s)
-- **Testing:** Cypress
-- **VM Provisioning:** Vagrant
-- **Source Control:** Git, GitHub
+Containerization: Docker
 
-## 📌 Objective
-To automate the process of building, testing, and deploying a modern web application using a full DevOps pipeline, minimizing manual overhead and ensuring consistent, reproducible environments.
+Orchestration: Kubernetes (K3s)
 
----
+Testing: Cypress
 
-## 🔧 Tools Used
+VM Provisioning: Vagrant
 
-| Tool        | Purpose                           |
-|-------------|-----------------------------------|
-| Vagrant     | Provision VMs for Jenkins, staging, production |
-| Jenkins     | Build, test, and deployment pipelines |
-| Docker      | Build and run application containers |
-| Kubernetes  | Deploy app across multiple nodes  |
-| Cypress     | End-to-end testing                |
-| GitHub      | Code hosting and pipeline triggers |
-| Ngrok       | Webhook tunneling for GitHub      |
+Source Control: Git, GitHub
 
----
+📌 Objective
+Automate the build, test, and deployment of a modern web application using a full DevOps toolchain. The goal is to ensure rapid, consistent, and error-resistant deployments in development, staging, and production environments.
 
-## 🧱 Architecture Overview
+🔧 Tools Used
+Vagrant:	Provision Jenkins, staging & prod VMs
+Jenkins:	Automate CI/CD pipelines
+Docker: Build and run containers
+Kubernetes: Deploy containers across nodes
+Cypress:	End-to-end testing
+GitHub:	Code hosting & webhook source
+Ngrok:	Expose Jenkins for webhook triggers
 
-The system is divided into three main environments:
+🧱 Architecture Overview
+Three primary environments:
 
-1. **Development** (Test Pipeline)
-2. **Staging** (Kubernetes cluster with 3 VMs)
-3. **Production** (Kubernetes cluster with 3 VMs)
+Development (Test pipeline)
 
-Each environment is provisioned using **Vagrant**, with the scripts available [here](https://github.com/sanjeebnepal/Vagrant-script-jenkinsdockerkubernetes.git).
+Staging (3-node Kubernetes cluster via Vagrant)
 
----
+Production (3-node Kubernetes cluster)
 
-## 🔄 CI/CD Pipelines
+Each environment is provisioned using Vagrant. Scripts:
+👉 Vagrant Setup Repo
 
-### ✅ Test Pipeline
-- Triggered via GitHub webhook.
-- Runs Cypress end-to-end tests.
-- Builds Docker image.
-- Tests the image locally via `curl`.
-- Pushes image to Docker Hub.
-- Triggers the **Staging Pipeline**.
+🔄 CI/CD Pipeline Workflow
+✅ Test Pipeline (Development)
+Triggered by GitHub webhook
 
-### 🧪 Staging Pipeline
-- Deploys Docker image to a K3s Kubernetes cluster (3 VMs).
-- Jenkins connects via SSH to execute deployment scripts.
-- Verifies app accessibility via exposed NodePort `31000`.
+Runs Cypress tests
 
-### 🚢 Production Pipeline
-- Identical setup to staging.
-- Final deployment using verified Docker image from Docker Hub.
-- Confirms success via application access on production cluster.
+Builds Docker image
 
----
+Tests locally with curl
 
-## 🔐 Jenkins & GitHub Integration
+Pushes to Docker Hub
 
-- **SSH Keys**: Used for GitHub access and remote VM control.
-- **Credentials Manager**: Stores DockerHub and SSH credentials.
-- **Ngrok**: Exposes Jenkins for GitHub webhook communication.
+Triggers Staging Pipeline
 
----
+🧪 Staging Pipeline
+Deploys image to K3s Kubernetes cluster
 
-## 📸 Screenshots & Logs (Optional)
-_Add screenshots of your Jenkins pipelines, Cypress test output, or Kubernetes dashboard if desired._
+Jenkins connects via SSH to 3 VMs
 
----
+Verifies deployment on NodePort 31000
 
-## 🧠 Lessons Learned
+🚢 Production Pipeline
+Mirror staging environment setup
 
-- CI/CD end-to-end implementation using open-source tools.
-- Environment replication using Vagrant.
-- Complex pipeline automation in Jenkins.
-- Kubernetes deployments with real-world challenges.
+Deploys a tested Docker image to 3 VMs
 
----
+Final verification on production NodePort 31000
 
-## ✅ Future Enhancements
+🔐 Integration Details
+SSH Keys: For secure GitHub and VM access
 
-- Add monitoring (Prometheus/Grafana).
-- Implement centralized logging (ELK Stack).
-- Adopt GitOps workflow with ArgoCD or Flux.
-- Support for blue-green or canary deployments.
+Credentials Manager: Stores DockerHub login & SSH private keys
 
----
+Ngrok: Tunnels Jenkins for GitHub webhook communication
 
-## 👥 Contributors
+🧠 Lessons Learned
+Full CI/CD implementation from scratch
 
-- **Sanjeeb Nepal**
-- **Nabin Shrestha**
-- **Diwash Shrestha**
-- **Divas Kumar Mahato**
-- **Divash Raj Upreti**
+Containerization and orchestration at scale
 
----
+Complex Jenkinsfile logic and SSH automation
 
-## 📜 License
+Real-world issues like port conflicts, deployment race conditions
 
-This project is for educational purposes and part of the **DevOps for Cloud Computing** course at Lambton College.
+✅ Future Improvements
+Add monitoring with Prometheus/Grafana
 
----
+Centralized logging with ELK Stack
 
+Use GitOps (ArgoCD or Flux)
+
+Add rollback strategies and blue-green deployments
+
+
+
+📜 License
+This project was developed for educational purposes under the DevOps for Cloud Computing course at Lambton College.
