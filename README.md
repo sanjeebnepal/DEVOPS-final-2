@@ -98,16 +98,6 @@ Each environment is provisioned using Vagrant. Scripts:
 
 ---
 
-## 👥 Contributors
-
-- **Sanjeeb Nepal**  
-- **Nabin Shrestha**  
-- **Diwash Shrestha**  
-- **Divas Kumar Mahato**  
-- **Divash Raj Upreti**  
-
----
-
 ## 📜 License
 
 This project was developed for educational purposes under the **DevOps for Cloud Computing** course at Lambton College.
